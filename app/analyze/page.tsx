@@ -52,81 +52,88 @@ export default function AnalyzePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f5f5f7] text-black">
+    <main className="min-h-screen bg-[#f3f4f6] text-black">
 
       {/* TOP BAR */}
 
-      <div className="border-b border-neutral-200 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
+      <div className="sticky top-0 z-50 border-b border-white/30 bg-white/70 backdrop-blur-2xl">
+
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
           <div>
-            <h1 className="text-2xl font-black tracking-tight">
-              THERMAL AI
+
+            <h1 className="text-5xl font-black tracking-[-0.08em] leading-none">
+              Thermal<span className="text-neutral-400">AI</span>
             </h1>
 
-            <p className="text-sm text-neutral-500 mt-1">
-              Advanced Thermal Wellness Intelligence
+            <p className="mt-2 text-sm uppercase tracking-[0.25em] text-neutral-500 font-semibold">
+              Global Skin Intelligence Platform
             </p>
+
           </div>
 
           <div className="hidden md:flex items-center gap-3">
 
-            <div className="px-4 py-2 rounded-2xl bg-neutral-100 text-sm font-medium">
+            <div className="rounded-2xl bg-black text-white px-5 py-3 text-sm font-bold shadow-xl">
               GPT-4o Vision
             </div>
 
-            <div className="px-4 py-2 rounded-2xl bg-black text-white text-sm font-semibold">
+            <div className="rounded-2xl border border-neutral-200 bg-white px-5 py-3 text-sm font-bold">
               AI Powered
             </div>
 
           </div>
 
         </div>
+
       </div>
 
       <section className="max-w-7xl mx-auto px-6 py-14">
 
         {/* HERO */}
 
-        <div className="mb-14">
+        <div className="mb-16">
 
-          <div className="inline-flex items-center rounded-full bg-black text-white px-5 py-2 text-sm font-medium">
-            AI Thermal Wellness Platform
+          <div className="inline-flex items-center rounded-full bg-black text-white px-6 py-3 text-sm font-bold tracking-wide shadow-lg">
+            ADVANCED THERMAL WELLNESS INTELLIGENCE
           </div>
 
-          <h1 className="mt-8 text-6xl font-black tracking-tight leading-tight max-w-4xl">
+          <h1 className="mt-8 text-7xl font-black tracking-[-0.06em] leading-[0.95] max-w-5xl">
             Professional AI Skin &
             Thermal Wellness Analysis
           </h1>
 
-          <p className="mt-6 text-xl text-neutral-600 max-w-3xl leading-relaxed">
-            Advanced visual wellness intelligence inspired by
-            Anatolian thermal therapy, peloid science and mineral wellness systems.
+          <p className="mt-8 text-2xl text-neutral-600 max-w-4xl leading-relaxed font-medium">
+            AI-powered visual wellness intelligence inspired by
+            Anatolian thermal therapy, mineral science and advanced
+            peloid wellness systems.
           </p>
 
         </div>
 
-        {/* GRID */}
+        {/* MAIN GRID */}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
 
-          {/* LEFT */}
+          {/* LEFT SIDE */}
 
-          <div className="rounded-[32px] border border-neutral-200 bg-white p-10 shadow-sm">
+          <div className="rounded-[40px] border border-white/40 bg-white/70 backdrop-blur-xl p-10 shadow-[0_25px_80px_rgba(0,0,0,0.08)]">
 
             <div className="flex items-center justify-between">
 
               <div>
-                <h2 className="text-3xl font-black">
-                  Upload Image
+
+                <h2 className="text-4xl font-black tracking-tight">
+                  Upload Analysis Image
                 </h2>
 
-                <p className="text-neutral-500 mt-2">
+                <p className="text-neutral-500 mt-3 text-lg">
                   Skin, scalp, nail or body image
                 </p>
+
               </div>
 
-              <div className="h-14 w-14 rounded-2xl bg-black text-white flex items-center justify-center text-xl font-bold">
+              <div className="h-16 w-16 rounded-3xl bg-black text-white flex items-center justify-center text-2xl font-black shadow-xl">
                 AI
               </div>
 
@@ -134,16 +141,16 @@ export default function AnalyzePage() {
 
             {/* LANGUAGE */}
 
-            <div className="mt-8">
+            <div className="mt-10">
 
-              <label className="block text-sm font-bold mb-3">
+              <label className="block text-sm font-black tracking-wide text-neutral-500 mb-4">
                 REPORT LANGUAGE
               </label>
 
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="w-full rounded-2xl border border-neutral-300 bg-neutral-50 px-5 py-4 text-lg font-medium outline-none"
+                className="w-full rounded-3xl border border-neutral-200 bg-white px-6 py-5 text-lg font-bold outline-none shadow-sm"
               >
                 <option>Türkçe</option>
                 <option>English</option>
@@ -156,33 +163,64 @@ export default function AnalyzePage() {
 
             </div>
 
-            {/* UPLOAD */}
+            {/* UPLOAD AREA */}
 
-            <div className="mt-8 rounded-3xl border-2 border-dashed border-neutral-300 bg-neutral-50 p-8">
+            <div className="mt-10 rounded-[40px] border-2 border-dashed border-neutral-300 bg-gradient-to-br from-white to-neutral-100 p-8">
 
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImage}
-                className="block w-full text-lg"
-              />
+              {!preview && (
+
+                <label className="flex flex-col items-center justify-center h-[420px] rounded-[36px] border border-neutral-200 bg-white cursor-pointer hover:scale-[1.01] transition-all shadow-sm">
+
+                  <div className="h-24 w-24 rounded-full bg-black text-white flex items-center justify-center text-5xl font-black shadow-2xl">
+                    +
+                  </div>
+
+                  <h3 className="mt-8 text-4xl font-black tracking-tight">
+                    Upload Image
+                  </h3>
+
+                  <p className="mt-5 text-neutral-500 text-center max-w-lg text-lg leading-relaxed px-6">
+                    Upload a skin, scalp, nail or body image for
+                    advanced AI-powered thermal wellness analysis.
+                  </p>
+
+                  <div className="mt-8 rounded-2xl bg-black text-white px-8 py-4 text-lg font-black shadow-xl">
+                    Select Image
+                  </div>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImage}
+                    className="hidden"
+                  />
+
+                </label>
+
+              )}
 
               {preview && (
 
-                <div className="mt-8">
+                <div>
 
-                  <img
-                    src={preview}
-                    alt="Preview"
-                    className="w-full rounded-3xl max-h-[520px] object-cover shadow-lg"
-                  />
+                  <div className="rounded-[36px] overflow-hidden border border-neutral-200 bg-black shadow-2xl">
+
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="w-full h-[520px] object-cover"
+                    />
+
+                  </div>
 
                   <button
                     onClick={analyzeImage}
                     disabled={loading}
-                    className="mt-8 w-full rounded-3xl bg-black text-white px-8 py-5 text-xl font-bold hover:opacity-90 transition-all"
+                    className="mt-8 w-full rounded-[30px] bg-black text-white px-8 py-6 text-2xl font-black tracking-wide hover:scale-[1.01] hover:opacity-90 transition-all shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
                   >
-                    {loading ? 'Analyzing with GPT-4o...' : 'Analyze with AI'}
+                    {loading
+                      ? 'Analyzing with GPT-4o Vision...'
+                      : 'Analyze with AI'}
                   </button>
 
                 </div>
@@ -193,114 +231,127 @@ export default function AnalyzePage() {
 
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT SIDE */}
 
           <div className="space-y-6">
 
-            {/* SCORE CARDS */}
+            {/* TOP STATS */}
 
             <div className="grid grid-cols-2 gap-6">
 
-              <div className="rounded-[32px] bg-white border border-neutral-200 p-8 shadow-sm">
+              {/* SCORE */}
+
+              <div className="rounded-[40px] bg-white border border-neutral-200 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
 
                 <div className="flex items-center justify-center">
 
-                  <div className="relative h-40 w-40">
+                  <div className="relative h-44 w-44">
 
-                    <svg className="h-40 w-40 rotate-[-90deg]">
+                    <svg className="h-44 w-44 rotate-[-90deg]">
+
                       <circle
-                        cx="80"
-                        cy="80"
-                        r="68"
+                        cx="88"
+                        cy="88"
+                        r="74"
                         stroke="#e5e5e5"
-                        strokeWidth="10"
+                        strokeWidth="12"
                         fill="none"
                       />
 
                       <circle
-                        cx="80"
-                        cy="80"
-                        r="68"
+                        cx="88"
+                        cy="88"
+                        r="74"
                         stroke="#0ea5e9"
-                        strokeWidth="10"
+                        strokeWidth="12"
                         fill="none"
-                        strokeDasharray="427"
-                        strokeDashoffset="90"
+                        strokeDasharray="465"
+                        strokeDashoffset="110"
                         strokeLinecap="round"
                       />
+
                     </svg>
 
-                    <div className="absolute inset-0 flex items-center justify-center flex-col">
-                      <span className="text-5xl font-black">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+
+                      <span className="text-6xl font-black">
                         78
                       </span>
 
-                      <span className="text-sm text-neutral-500 font-medium">
+                      <span className="text-sm text-neutral-500 uppercase tracking-wide font-bold">
                         Score
                       </span>
+
                     </div>
 
                   </div>
 
                 </div>
 
-                <div className="mt-5 text-center">
-                  <h3 className="text-2xl font-black">
+                <div className="mt-6 text-center">
+
+                  <h3 className="text-3xl font-black">
                     Wellness Score
                   </h3>
 
-                  <p className="mt-2 text-neutral-500">
-                    AI generated skin wellness metric
+                  <p className="mt-3 text-neutral-500 text-lg">
+                    AI generated wellness metric
                   </p>
+
                 </div>
 
               </div>
 
-              <div className="rounded-[32px] bg-white border border-neutral-200 p-8 shadow-sm">
+              {/* RISK */}
 
-                <div className="text-sm font-bold text-neutral-500">
-                  RISK LEVEL
+              <div className="rounded-[40px] bg-white border border-neutral-200 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+
+                <div className="text-sm font-black tracking-wide text-neutral-500 uppercase">
+                  Risk Level
                 </div>
 
-                <h3 className="mt-4 text-5xl font-black">
+                <h3 className="mt-5 text-6xl font-black tracking-tight">
                   Moderate
                 </h3>
 
-                <div className="mt-6 h-3 rounded-full bg-neutral-200 overflow-hidden">
-                  <div className="h-full w-[68%] bg-orange-400 rounded-full"></div>
+                <div className="mt-8 h-4 rounded-full bg-neutral-200 overflow-hidden">
+
+                  <div className="h-full w-[68%] rounded-full bg-orange-400"></div>
+
                 </div>
 
-                <p className="mt-4 text-neutral-600 leading-relaxed">
-                  Moderate visible irritation and texture irregularities detected.
+                <p className="mt-6 text-neutral-600 text-lg leading-relaxed">
+                  Moderate visible irritation and texture
+                  irregularities detected.
                 </p>
 
               </div>
 
             </div>
 
-            {/* INFO CARDS */}
+            {/* INFO */}
 
             <div className="grid grid-cols-2 gap-6">
 
-              <div className="rounded-[32px] bg-white border border-neutral-200 p-8 shadow-sm">
+              <div className="rounded-[40px] bg-white border border-neutral-200 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
 
-                <div className="text-sm font-bold text-neutral-500">
-                  AI ENGINE
+                <div className="text-sm font-black tracking-wide text-neutral-500 uppercase">
+                  AI Engine
                 </div>
 
-                <h3 className="mt-4 text-4xl font-black">
+                <h3 className="mt-5 text-5xl font-black tracking-tight">
                   GPT-4o Vision
                 </h3>
 
               </div>
 
-              <div className="rounded-[32px] bg-white border border-neutral-200 p-8 shadow-sm">
+              <div className="rounded-[40px] bg-white border border-neutral-200 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
 
-                <div className="text-sm font-bold text-neutral-500">
-                  REPORT LANGUAGE
+                <div className="text-sm font-black tracking-wide text-neutral-500 uppercase">
+                  Language
                 </div>
 
-                <h3 className="mt-4 text-4xl font-black">
+                <h3 className="mt-5 text-5xl font-black tracking-tight">
                   {language}
                 </h3>
 
@@ -310,28 +361,29 @@ export default function AnalyzePage() {
 
             {/* BRANDS */}
 
-            <div className="rounded-[32px] bg-black text-white p-10 shadow-xl">
+            <div className="rounded-[40px] bg-black text-white p-10 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
 
-              <h3 className="text-3xl font-black">
-                Thermal Wellness Brands
+              <h3 className="text-4xl font-black tracking-tight">
+                Thermal Wellness Ecosystem
               </h3>
 
-              <p className="mt-3 text-neutral-300 leading-relaxed">
-                Integrated Anatolian thermal wellness ecosystem.
+              <p className="mt-4 text-neutral-300 text-lg leading-relaxed">
+                Integrated mineral wellness, thermal care and
+                peloid intelligence ecosystem.
               </p>
 
-              <div className="grid grid-cols-2 gap-4 mt-8">
+              <div className="grid grid-cols-2 gap-5 mt-10">
 
                 <a
                   href="https://www.zamavil.com/"
                   target="_blank"
-                  className="rounded-2xl bg-white/10 border border-white/10 p-5 hover:bg-white/20 transition"
+                  className="rounded-3xl bg-white/10 border border-white/10 p-6 hover:bg-white/20 transition"
                 >
-                  <div className="text-xl font-black">
+                  <div className="text-2xl font-black">
                     Zamavil
                   </div>
 
-                  <div className="mt-2 text-sm text-neutral-300">
+                  <div className="mt-3 text-neutral-300">
                     Thermal wellness care
                   </div>
                 </a>
@@ -339,13 +391,13 @@ export default function AnalyzePage() {
                 <a
                   href="https://www.drbentonit.com/"
                   target="_blank"
-                  className="rounded-2xl bg-white/10 border border-white/10 p-5 hover:bg-white/20 transition"
+                  className="rounded-3xl bg-white/10 border border-white/10 p-6 hover:bg-white/20 transition"
                 >
-                  <div className="text-xl font-black">
+                  <div className="text-2xl font-black">
                     Dr. Bentonit
                   </div>
 
-                  <div className="mt-2 text-sm text-neutral-300">
+                  <div className="mt-3 text-neutral-300">
                     Mineral skincare support
                   </div>
                 </a>
@@ -353,13 +405,13 @@ export default function AnalyzePage() {
                 <a
                   href="https://www.peloid.com.tr/"
                   target="_blank"
-                  className="rounded-2xl bg-white/10 border border-white/10 p-5 hover:bg-white/20 transition"
+                  className="rounded-3xl bg-white/10 border border-white/10 p-6 hover:bg-white/20 transition"
                 >
-                  <div className="text-xl font-black">
+                  <div className="text-2xl font-black">
                     Peloid Türkiye
                   </div>
 
-                  <div className="mt-2 text-sm text-neutral-300">
+                  <div className="mt-3 text-neutral-300">
                     Thermal peloid wellness
                   </div>
                 </a>
@@ -367,13 +419,13 @@ export default function AnalyzePage() {
                 <a
                   href="https://www.peloidtherapy.com/"
                   target="_blank"
-                  className="rounded-2xl bg-white/10 border border-white/10 p-5 hover:bg-white/20 transition"
+                  className="rounded-3xl bg-white/10 border border-white/10 p-6 hover:bg-white/20 transition"
                 >
-                  <div className="text-xl font-black">
+                  <div className="text-2xl font-black">
                     Peloid Therapy
                   </div>
 
-                  <div className="mt-2 text-sm text-neutral-300">
+                  <div className="mt-3 text-neutral-300">
                     Global wellness platform
                   </div>
                 </a>
@@ -390,31 +442,31 @@ export default function AnalyzePage() {
 
         {result && (
 
-          <div className="mt-14 rounded-[40px] border border-neutral-200 bg-white p-12 shadow-sm">
+          <div className="mt-16 rounded-[44px] border border-neutral-200 bg-white p-14 shadow-[0_25px_90px_rgba(0,0,0,0.06)]">
 
             <div className="flex items-center justify-between flex-wrap gap-4">
 
               <div>
 
-                <h2 className="text-6xl font-black tracking-tight">
+                <h2 className="text-7xl font-black tracking-[-0.05em]">
                   AI Analysis Report
                 </h2>
 
-                <p className="mt-3 text-xl text-neutral-500">
+                <p className="mt-4 text-2xl text-neutral-500">
                   Powered by GPT-4o Vision Intelligence
                 </p>
 
               </div>
 
-              <button className="rounded-2xl border-2 border-black px-8 py-4 text-lg font-bold hover:bg-black hover:text-white transition">
+              <button className="rounded-3xl border-2 border-black px-8 py-5 text-lg font-black hover:bg-black hover:text-white transition-all">
                 Download PDF
               </button>
 
             </div>
 
-            <div className="mt-12 rounded-3xl bg-neutral-50 border border-neutral-200 p-10">
+            <div className="mt-14 rounded-[36px] bg-neutral-50 border border-neutral-200 p-10">
 
-              <div className="prose prose-neutral max-w-none text-lg leading-9 whitespace-pre-wrap">
+              <div className="prose prose-neutral max-w-none text-xl leading-10 whitespace-pre-wrap">
                 {result}
               </div>
 
