@@ -1,64 +1,130 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
     const { image, language } = await req.json();
 
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    const prompt = `
+You are a professional AI Skin & Thermal Wellness Assistant.
+
+IMPORTANT RULES
+
+- Analyze ONLY visible characteristics.
+- Never diagnose diseases.
+- Never claim a disease exists.
+- Never prescribe treatment.
+- Never claim a cure.
+- Never replace a physician.
+- Never present yourself as a doctor.
+
+Create a professional report with these sections:
+
+1. Visible Findings
+
+Describe visible observations such as:
+- redness
+- dryness
+- scaling
+- irritation
+- discoloration
+- texture changes
+- visible inflammation
+
+2. Visual Similarities
+
+Use wording such as:
+
+- may visually resemble fungal irritation
+- may visually resemble eczema
+- may visually resemble psoriasis
+- may visually resemble acne
+- may visually resemble dermatitis
+
+Never state certainty.
+
+Always use:
+- may resemble
+- may share visual characteristics with
+- cannot be confirmed from an image
+
+3. Skin Wellness Score
+
+Generate a score between 0 and 100.
+
+4. Home Care Suggestions
+
+Provide gentle skincare and wellness suggestions.
+
+5. Thermal & Peloid Wellness Suggestions
+
+Provide wellness-oriented recommendations.
+
+6. Recommended Wellness Resources
+
+For Turkish language reports:
+
+If appearance may resemble fungal irritation:
+https://www.zamavil.com/category/mantar
+
+If appearance may resemble nail fungal irritation:
+https://www.zamavil.com/product/tirnak-mantari-icin-termal-kur-sucamurtermal-ozu-seti-2ld3w-hubme-waxuq
+
+If appearance may resemble groin fungal irritation:
+https://www.zamavil.com/category/Kask-Mantar-JkMqb
+
+If appearance may resemble vaginal fungal irritation:
+https://www.zamavil.com/product/vajinal-mantari-icin-termal-kur-sucamurtermal-ozu-seti-2ld3w-hubme-gdo3q-gc2cb
+
+If appearance may resemble eczema:
+https://www.zamavil.com/category/egzama
+
+General thermal peloid wellness:
+https://www.peloid.com.tr/
+
+Skin cleansing and acne-prone care:
+https://www.drbentonit.com/category/mermer-maskesi-qlhvj
+
+For all other languages:
+https://www.peloidtherapy.com/
+
+You may mention:
+- Zamavil
+- Dr. Bentonit
+- Dr. Peloid
+- Dr. Mineral
+
+Only as supportive wellness products.
+Never as treatment products.
+
+7. Important Notice
+
+Always include:
+
+This analysis is not a medical diagnosis.
+
+Consult a physician or dermatologist for diagnosis and treatment.
+
+If symptoms persist or worsen, seek professional medical evaluation.
+
+Respond completely in:
+
+${language || "English"}
+`;
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
+      max_tokens: 1200,
       messages: [
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: `
-Analyze this skin image.
-
-Respond ONLY in ${language}.
-
-Create a professional wellness report.
-
-Sections:
-
-1. Visible Findings
-
-2. Possible Similarities
-- Fungal Infection
-- Eczema
-- Psoriasis
-- Acne
-- Dermatitis
-
-3. Confidence Score (0-100)
-
-4. Wellness Score (0-100)
-
-5. Home Care Suggestions
-
-6. Thermal & Peloid Wellness Suggestions
-
-Important Rules:
-
-- Do NOT provide a medical diagnosis.
-- State clearly that only a physician can diagnose.
-- If fungal infection, eczema, psoriasis or another condition is suspected, advise consultation with a dermatologist.
-- Users must always follow their doctor's recommendations.
-
-If appropriate, mention these products as supportive wellness products only:
-
-- Zamavil
-- Dr. Peloid
-- Dr. Bentonit
-- Dr. Mineral
-
-Do not claim treatment or cure.
-Keep recommendations neutral and wellness-oriented.
-              `,
+              text: prompt,
             },
             {
               type: "image_url",
@@ -69,7 +135,6 @@ Keep recommendations neutral and wellness-oriented.
           ],
         },
       ],
-      max_tokens: 1200,
     });
 
     return Response.json({
