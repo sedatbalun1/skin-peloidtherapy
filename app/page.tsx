@@ -3,13 +3,21 @@
 import { useState, ChangeEvent, DragEvent } from 'react'
 import ReactMarkdown from 'react-markdown'
 
+interface Resource {
+  title: string
+  desc: string
+  url: string
+}
+
 export default function HomePage() {
   const [preview, setPreview] = useState<string | null>(null)
   const [language, setLanguage] = useState('Türkçe')
-  const [analysisMode, setAnalysisMode] = useState('Wellness Scan') // New Pro Feature
+  const [analysisMode, setAnalysisMode] = useState('Wellness Scan')
   const [loading, setLoading] = useState(false)
+  const [loadingStep, setLoadingStep] = useState('')
   const [result, setResult] = useState('')
   const [dragActive, setDragActive] = useState(false)
+  const [dynamicResources, setDynamicResources] = useState<Resource[]>([])
 
   const handleDrag = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -46,11 +54,36 @@ export default function HomePage() {
     reader.readAsDataURL(file)
   }
 
+  // Visual simulation for professional telemetry tracking
+  const runLoadingSteps = () => {
+    const steps = [
+      'Görsel spektrum taranıyor...',
+      'Epidermal katman bütünlüğü ölçülüyor...',
+      'Doku irritasyon ve nem indeksi hesaplanıyor...',
+      'Peloid & Mineral korelasyon matrisi sentezleniyor...'
+    ]
+    let currentStep = 0
+    setLoadingStep(steps[0])
+    
+    const interval = setInterval(() => {
+      currentStep++
+      if (currentStep < steps.length) {
+        setLoadingStep(steps[currentStep])
+      } else {
+        clearInterval(interval)
+      }
+    }, 2500)
+
+    return interval
+  }
+
   async function analyzeImage() {
     if (!preview) return
 
     setLoading(true)
     setResult('')
+    setDynamicResources([])
+    const stepInterval = runLoadingSteps()
 
     try {
       const response = await fetch('/api/analyze', {
@@ -61,7 +94,7 @@ export default function HomePage() {
         body: JSON.stringify({
           image: preview,
           language,
-          mode: analysisMode, // Passing the grey area configuration to the prompt backend
+          mode: analysisMode,
         }),
       })
 
@@ -70,42 +103,86 @@ export default function HomePage() {
       }
 
       const data = await response.json()
-      setResult(data.result || 'Analiz sonucu alınamadı.')
+      const aiResponse = data.result || 'Analiz sonucu alınamadı.'
+      setResult(aiResponse)
+      
+      // Smart conversion trigger: dynamically filter target store recommendation based on AI textual match
+      generateSmartRecommendations(aiResponse)
+
     } catch (error) {
       console.error(error)
       setResult('**Sistem Mesajı:** Görsel katmanları işlenirken bir sorun oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.')
     } finally {
+      clearInterval(stepInterval)
       setLoading(false)
+      setLoadingStep('')
     }
+  }
+
+  const generateSmartRecommendations = (text: string) => {
+    const lowerText = text.toLowerCase()
+    const recommendations: Resource[] = []
+
+    if (lowerText.includes('mantar') || lowerText.includes('fungal')) {
+      if (lowerText.includes('tırnak') || lowerText.includes('nail')) {
+        recommendations.push({ title: 'Zamavil Tırnak Kürü', desc: 'Tırnak Yüzeyi Termal Su ve Çamur Özü Seti', url: 'https://www.zamavil.com/product/tirnak-mantari-icin-termal-kur-sucamurtermal-ozu-seti-2ld3w-hubme-waxuq' })
+      } else if (lowerText.includes('kasık') || lowerText.includes('groin')) {
+        recommendations.push({ title: 'Zamavil Kasık Protokolü', desc: 'Hassas Bölge Bariyer Dengeleyici Terapi', url: 'https://www.zamavil.com/category/Kask-Mantar-JkMqb' })
+      } else {
+        recommendations.push({ title: 'Zamavil Termal Mantar Serisi', desc: 'Yüzeyel İrritasyon Karşıtı Mineral Çözüm', url: 'https://www.zamavil.com/category/mantar' })
+      }
+    }
+    
+    if (lowerText.includes('egzama') || lowerText.includes('eczema') || lowerText.includes('pul') || lowerText.includes('dökülme')) {
+      recommendations.push({ title: 'Zamavil Egzama Protokolü', desc: 'Yoğun Yoğun Nemlendirici ve Bariyer Koruyucu Set', url: 'https://www.zamavil.com/category/egzama' })
+    }
+
+    if (lowerText.includes('akne') || lowerText.includes('acne') || lowerText.includes('gözenek') || lowerText.includes('yağlanma')) {
+      recommendations.push({ title: 'Dr. Bentonit Mermer Maskesi', desc: 'Derin Gözenek Arındırıcı Medikal Kil Maskesi', url: 'https://www.drbentonit.com/category/mermer-maskesi-qlhvj' })
+    }
+
+    // Default safe clinical recommendations if no strong match occurs
+    if (recommendations.length === 0) {
+      recommendations.push(
+        { title: 'Peloid Türkiye', desc: 'Sertifikalı Doğal Termal Peloid Çamuru', url: 'https://www.peloid.com.tr/' },
+        { title: 'Dr. Bentonit Kil Bakımı', desc: 'Bütünsel Saf Bentonit Skincare Minerali', url: 'https://www.drbentonit.com/' }
+      )
+    }
+
+    setDynamicResources(recommendations)
   }
 
   const clearImage = () => {
     setPreview(null)
     setResult('')
+    setDynamicResources([])
   }
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] text-neutral-800 antialiased font-sans selection:bg-neutral-200/60">
       
+      {/* GLOBAL PROGRESS LINEAR ANIMATION */}
       {loading && (
         <div className="fixed top-0 left-0 right-0 h-[2px] bg-neutral-100 z-[60] overflow-hidden">
-          <div className="h-full bg-[#35261F] animate-pulse w-full origin-left scale-x-[0.4]" />
+          <div className="h-full bg-[#35261F] animate-pulse w-full origin-left scale-x-[0.6] transition-transform duration-[20000ms]" />
         </div>
       )}
 
+      {/* HEADER */}
       <header className="sticky top-0 z-50 border-b border-neutral-200/50 bg-white/75 backdrop-blur-md">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           
-          <a href="https://peloidtherapy.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 group">
+          {/* FIXED INTERNAL ACTION: RESET APPLICATION INSTEAD OF EXTERNAL LINK */}
+          <button onClick={clearImage} className="flex items-center gap-2 group text-left outline-none">
             <div className="leading-none">
-              <span className="text-lg font-black tracking-tight text-neutral-900">
+              <span className="text-lg font-black tracking-tight text-neutral-900 group-hover:text-neutral-700 transition-colors">
                 Peloid<span className="text-[#35261F] font-medium">AI</span>
               </span>
               <span className="block text-[9px] uppercase tracking-[0.2em] text-neutral-400 font-bold mt-0.5 tracking-widest">
                 Visual Wellness Intelligence
               </span>
             </div>
-          </a>
+          </button>
 
           <div className="flex items-center gap-2.5">
             <span className="inline-flex items-center gap-1.5 rounded-md bg-neutral-50 px-2 py-0.5 text-[11px] font-semibold text-neutral-600 border border-neutral-200/60 shadow-sm">
@@ -118,13 +195,14 @@ export default function HomePage() {
               rel="noopener noreferrer"
               className="rounded-lg bg-white border border-neutral-200 hover:border-neutral-300 text-neutral-700 px-3 py-1.5 text-xs font-semibold transition shadow-sm active:bg-neutral-50"
             >
-              PeloidTherapy.com
+              Ecosystem Root
             </a>
           </div>
 
         </div>
       </header>
 
+      {/* MASTER CONTAINER */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8 md:py-10">
         
         <div className="border-b border-neutral-200/50 pb-5 mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
@@ -144,10 +222,10 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[0.35fr_0.65fr] gap-6 items-start">
           
+          {/* CONTROL PANEL */}
           <div className="space-y-4">
             <div className="rounded-2xl border border-neutral-200/90 bg-white p-5 shadow-sm">
               
-              {/* ANALYSIS DEPTH MODE SELECT (NEW GREY-AREA PRO FEATURE) */}
               <div className="mb-4">
                 <label className="block text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-1.5">
                   Analysis Framework Mode
@@ -178,7 +256,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* LANGUAGE SELECTION */}
               <div className="mb-4">
                 <label className="block text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-1.5">
                   Target Diagnostics Language
@@ -203,7 +280,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* PAYLOAD ZONE */}
               <div>
                 <label className="block text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-1.5">
                   Inspection Payload
@@ -259,7 +335,7 @@ export default function HomePage() {
                         disabled={loading}
                         className="col-span-2 h-9 rounded-lg bg-[#35261F] text-white text-xs font-semibold shadow-sm hover:opacity-95 transition disabled:opacity-40 flex items-center justify-center gap-1.5"
                       >
-                        {loading ? 'Sentezleniyor...' : 'Analizi Başlat'}
+                        {loading ? 'İşleniyor...' : 'Analizi Başlat'}
                       </button>
                     </div>
                   </div>
@@ -269,6 +345,7 @@ export default function HomePage() {
             </div>
           </div>
 
+          {/* DIAGNOSTICS & TELEMETRY */}
           <div className="space-y-4">
             
             {/* META WIDGETS BAR */}
@@ -289,7 +366,7 @@ export default function HomePage() {
                       Orta Seviye
                     </span>
                   ) : (
-                    <span className="font-medium text-neutral-400">Ölçülüyor...</span>
+                    <span className="font-medium text-neutral-400">{loading ? 'Hesaplanıyor...' : 'Bekleniyor...'}</span>
                   )}
                 </div>
 
@@ -306,7 +383,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* DIAGNOSTICS CONTAINER */}
+            {/* DIAGNOSTICS OUTPUT CONTAINER */}
             <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm min-h-[460px] flex flex-col justify-between gap-6">
               
               <div className="w-full">
@@ -331,22 +408,22 @@ export default function HomePage() {
                 </div>
 
                 {result ? (
-                  <div className="prose prose-neutral prose-sm max-w-none prose-headings:font-semibold prose-headings:text-neutral-900 prose-headings:tracking-tight prose-p:text-neutral-600 prose-p:leading-relaxed prose-li:text-neutral-600">
+                  <div className="prose prose-neutral prose-sm max-w-none prose-headings:font-semibold prose-headings:text-neutral-900 prose-headings:tracking-tight prose-p:text-neutral-600 prose-p:leading-relaxed prose-li:text-neutral-600 animate-[fadeIn_0.3s_ease-out]">
                     <ReactMarkdown>{result}</ReactMarkdown>
                   </div>
                 ) : (
                   <div className="h-80 flex flex-col items-center justify-center text-center p-4 border border-dashed border-neutral-200/70 rounded-xl bg-neutral-50/20">
-                    <span className="text-neutral-400 text-xs sm:text-sm font-semibold">
-                      {loading ? 'Doku spektrumu ve peloid matrisi analiz ediliyor...' : 'Yapay Zekâ Analizi Hazır'}
+                    <span className="text-neutral-400 text-xs sm:text-sm font-semibold h-6 flex items-center justify-center">
+                      {loading ? loadingStep : 'Yapay Zekâ Analizi Hazır'}
                     </span>
                     <p className="text-[11px] text-neutral-400 max-w-xs mt-1 leading-normal font-normal">
-                      {loading ? 'Veriler işleniyor, lütfen bekleyiniz.' : 'Görsel yükleyip "Analizi Başlat" butonuna basarak bütünsel tarama raporunu tetikleyin.'}
+                      {loading ? 'Yapay zekâ görsel katmanları analiz ediyor, lütfen arayüzü yenilemeyiniz.' : 'Görsel yükleyip "Analizi Başlat" butonuna basarak bütünsel tarama raporunu tetikleyin.'}
                     </p>
                   </div>
                 )}
               </div>
 
-              {/* STRICT GREY-AREA DISCLAIMER (LEGAL & COMPLIANCE) */}
+              {/* COMPLIANCE DISCLAIMER */}
               <div className="border-t border-neutral-100 pt-4 text-[11px] text-neutral-400 leading-relaxed font-normal">
                 <strong className="text-neutral-500 font-medium">Bütünsel Wellness Bildirimi:</strong> Bu panelde sunulan veriler ve yapay zekâ değerlendirmeleri tıbbi teşhis, tedavi veya klinik bir tanı amacı taşımamaktadır. Sistem, mineral dengesi ve bütünsel cilt wellness takibi için tasarlanmıştır. Kalıcı veya ilerleyen durumlarda lütfen tıp uzmanlarına danışınız.
               </div>
@@ -357,24 +434,25 @@ export default function HomePage() {
 
         </div>
 
+        {/* RESOURCE NODES SECTION */}
         <div className="mt-12 border-t border-neutral-200/60 pt-6">
           <h4 className="text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-3.5 tracking-widest">
-            Önerilen Mineral Terapi Protokolleri & Kaynaklar
+            {dynamicResources.length > 0 ? '🎯 Sizin İçin Önerilen Noktasal Terapi Ürünleri' : 'Önerilen Mineral Terapi Protokolleri & Kaynaklar'}
           </h4>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-            {[
+            {(dynamicResources.length > 0 ? dynamicResources : [
               { title: 'Zamavil', desc: 'Termal Wellness Çözümleri', url: 'https://www.zamavil.com/' },
               { title: 'Dr. Bentonit', desc: 'İleri Düzey Kil ve Mineral Bakımı', url: 'https://www.drbentonit.com/' },
               { title: 'Peloid Türkiye', desc: 'Sertifikalı Medikal Peloidler', url: 'https://www.peloid.com.tr/' },
               { title: 'Peloid Therapy', desc: 'Global Bilim ve Danışmanlık Otoritesi', url: 'https://www.peloidtherapy.com/' },
-            ].map((resource) => (
+            ]).map((resource) => (
               <a
                 key={resource.title}
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-xl border border-neutral-200 bg-white p-3.5 hover:border-neutral-300 transition-all hover:shadow-sm active:scale-[0.99]"
+                className="group block rounded-xl border border-neutral-200 bg-white p-3.5 hover:border-neutral-300 transition-all hover:shadow-sm active:scale-[0.99] animate-[fadeIn_0.2s_ease-out]"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-neutral-800 group-hover:text-neutral-950 transition-colors">
