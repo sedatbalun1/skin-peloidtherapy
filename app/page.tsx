@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 
 export default function HomePage() {
   const [preview, setPreview] = useState<string | null>(null)
-  const [language, setLanguage] = useState('TÃ¼rkÃ§e')
+  const [language, setLanguage] = useState('Türkçe')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState('')
   const [dragActive, setDragActive] = useState(false)
@@ -69,10 +69,10 @@ export default function HomePage() {
       }
 
       const data = await response.json()
-      setResult(data.result || 'Analiz sonucu alÄ±namadÄ±.')
+      setResult(data.result || 'Analiz sonucu alınamadı.')
     } catch (error) {
       console.error(error)
-      setResult('**Analiz HatasÄ±:** GÃ¶rsel katmanlarÄ± iÅŸlenirken bir sorun oluÅŸtu. LÃ¼tfen API baÄŸlantÄ±nÄ±zÄ± ve internetinizi kontrol edip tekrar deneyiniz.')
+      setResult('**Analiz Hatası:** Görsel katmanları işlenirken bir sorun oluştu. Lütfen API bağlantınızı ve internetinizi kontrol edip tekrar deneyiniz.')
     } finally {
       setLoading(false)
     }
@@ -136,7 +136,7 @@ export default function HomePage() {
               AI Wellness Workspace
             </h2>
             <p className="mt-1 text-xs sm:text-sm text-neutral-500 max-w-2xl leading-relaxed">
-              Anatolia mineral bilim temelli telemetri ve bilgisayarlÄ± gÃ¶rÃ¼ arayÃ¼zÃ¼. Analiz verilerini doÄŸrudan ve pÃ¼rÃ¼zsÃ¼zce Ã¼retin.
+              Anatolia mineral bilim temelli telemetri ve bilgisayarlı görü arayüzü. Analiz verilerini doğrudan ve pürüzsüzce üretin.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs text-neutral-400 font-medium">
@@ -163,16 +163,16 @@ export default function HomePage() {
                     onChange={(e) => setLanguage(e.target.value)}
                     className="w-full h-9 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-xs font-semibold text-neutral-700 outline-none appearance-none cursor-pointer focus:border-[#35261F] transition"
                   >
-                    <option>TÃ¼rkÃ§e</option>
+                    <option>Türkçe</option>
                     <option>English</option>
                     <option>Deutsch</option>
-                    <option>FranÃ§ais</option>
-                    <option>EspaÃ±ol</option>
-                    <option>Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</option>
-                    <option>Ğ ÑƒÑÑĞºĞ¸Ğ¹</option>
+                    <option>Français</option>
+                    <option>Español</option>
+                    <option>العربية</option>
+                    <option>Русский</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-neutral-400">
-                    <span className="text-[9px]">â–¼</span>
+                    <span className="text-[9px]">▼</span>
                   </div>
                 </div>
               </div>
@@ -204,9 +204,9 @@ export default function HomePage() {
                     <div className="h-9 w-9 rounded-lg bg-white border border-neutral-200/60 flex items-center justify-center text-neutral-500 shadow-sm group-hover:text-neutral-700 font-light text-lg">
                       +
                     </div>
-                    <span className="mt-3 text-xs font-semibold text-neutral-700">GÃ¶rsel SeÃ§in veya SÃ¼rÃ¼kleyin</span>
+                    <span className="mt-3 text-xs font-semibold text-neutral-700">Görsel Seçin veya Sürükleyin</span>
                     <span className="mt-1 text-[11px] text-neutral-400 max-w-[200px] leading-normal font-normal">
-                      Dermatolojik doku, tÄ±rnak, saÃ§ derisi anomalisi fotoÄŸrafÄ±.
+                      Dermatolojik doku, tırnak, saç derisi anomalisi fotoğrafı.
                     </span>
                   </div>
                 ) : (
@@ -233,7 +233,7 @@ export default function HomePage() {
                         disabled={loading}
                         className="col-span-2 h-9 rounded-lg bg-[#35261F] text-white text-xs font-semibold shadow-sm hover:opacity-95 transition disabled:opacity-40 flex items-center justify-center gap-1.5"
                       >
-                        {loading ? 'Ä°ÅŸleniyor...' : 'Analizi BaÅŸlat'}
+                        {loading ? 'İşleniyor...' : 'Analizi Başlat'}
                       </button>
                     </div>
                   </div>
@@ -291,7 +291,7 @@ export default function HomePage() {
                       AI Analysis Diagnostics
                     </h3>
                     <p className="text-[11px] text-neutral-400 mt-0.5 font-normal">
-                      SentezlenmiÅŸ tÄ±bbi ve yapÄ±landÄ±rÄ±lmÄ±ÅŸ klinik raporlama alanÄ±
+                      Sentezlenmiş tıbbi ve yapılandırılmış klinik raporlama alanı
                     </p>
                   </div>
                   
@@ -312,10 +312,10 @@ export default function HomePage() {
                 ) : (
                   <div className="h-80 flex flex-col items-center justify-center text-center p-4 border border-dashed border-neutral-200/70 rounded-xl bg-neutral-50/20">
                     <span className="text-neutral-400 text-xs sm:text-sm font-semibold">
-                      {loading ? 'Klinik veriler ve telemetri loglarÄ± iÅŸleniyor...' : 'TanÄ±sal Ä°ÅŸlem Tetiklenmeyi Bekliyor'}
+                      {loading ? 'Klinik veriler ve telemetri logları işleniyor...' : 'Tanısal İşlem Tetiklenmeyi Bekliyor'}
                     </span>
                     <p className="text-[11px] text-neutral-400 max-w-xs mt-1 leading-normal font-normal">
-                      {loading ? 'Yapay zekÃ¢ gÃ¶rsel katmanlarÄ± analiz ediyor, lÃ¼tfen arayÃ¼zÃ¼ yenilemeyiniz.' : 'Sol kontrol paneli Ã¼zerinden geÃ§erli bir anomali gÃ¶rseli yÃ¼kleyip motoru Ã§alÄ±ÅŸtÄ±rarak raporlamayÄ± baÅŸlatÄ±n.'}
+                      {loading ? 'Yapay zekâ görsel katmanları analiz ediyor, lütfen arayüzü yenilemeyiniz.' : 'Sol kontrol paneli üzerinden geçerli bir anomali görseli yükleyip motoru çalıştırarak raporlamayı başlatın.'}
                     </p>
                   </div>
                 )}
@@ -330,15 +330,15 @@ export default function HomePage() {
         {/* Institutional Links & Resources */}
         <div className="mt-12 border-t border-neutral-200/60 pt-6">
           <h4 className="text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-3.5 tracking-widest">
-            Ã–nerilen Mineral Terapi Protokolleri & Kaynaklar
+            Önerilen Mineral Terapi Protokolleri & Kaynaklar
           </h4>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { title: 'Zamavil', desc: 'Termal Wellness Ã‡Ã¶zÃ¼mleri', url: 'https://www.zamavil.com/' },
-              { title: 'Dr. Bentonit', desc: 'Ä°leri DÃ¼zey Kil ve Mineral BakÄ±mÄ±', url: 'https://www.drbentonit.com/' },
-              { title: 'Peloid TÃ¼rkiye', desc: 'SertifikalÄ± Medikal Peloidler', url: 'https://www.peloid.com.tr/' },
-              { title: 'Peloid Therapy', desc: 'Global Bilim ve DanÄ±ÅŸmanlÄ±k Otoritesi', url: 'https://www.peloidtherapy.com/' },
+              { title: 'Zamavil', desc: 'Termal Wellness Çözümleri', url: 'https://www.zamavil.com/' },
+              { title: 'Dr. Bentonit', desc: 'İleri Düzey Kil ve Mineral Bakımı', url: 'https://www.drbentonit.com/' },
+              { title: 'Peloid Türkiye', desc: 'Sertifikalı Medikal Peloidler', url: 'https://www.peloid.com.tr/' },
+              { title: 'Peloid Therapy', desc: 'Global Bilim ve Danışmanlık Otoritesi', url: 'https://www.peloidtherapy.com/' },
             ].map((resource) => (
               <a
                 key={resource.title}
@@ -352,7 +352,7 @@ export default function HomePage() {
                     {resource.title}
                   </span>
                   <span className="text-[10px] text-neutral-400 group-hover:text-neutral-600 transition-all transform group-hover:translate-x-0.5 duration-150">
-                    â†’
+                    →
                   </span>
                 </div>
                 <p className="text-[11px] text-neutral-400 mt-0.5 font-normal group-hover:text-neutral-500 transition-colors">
