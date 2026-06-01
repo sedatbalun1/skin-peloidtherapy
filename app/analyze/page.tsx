@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import { CircularProgressbar } from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
 
 export default function AnalyzePage() {
   const [preview, setPreview] = useState<string | null>(null)
   const [language, setLanguage] = useState('Türkçe')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState('')
+  const [score] = useState(78)
 
   async function handleImage(event: any) {
     const file = event.target.files?.[0]
@@ -53,15 +56,14 @@ export default function AnalyzePage() {
 
   return (
     <main className="min-h-screen bg-neutral-50">
-
       <section className="max-w-7xl mx-auto px-6 py-20">
 
-        <div className="mb-10">
+        <div className="mb-12">
           <div className="inline-flex rounded-full border border-neutral-200 bg-white px-5 py-2 text-sm">
-            AI Thermal Wellness Analysis
+            AI Thermal Wellness Platform
           </div>
 
-          <h1 className="mt-6 text-5xl font-bold tracking-tight">
+          <h1 className="mt-6 text-6xl font-bold tracking-tight">
             AI Skin Analysis
           </h1>
 
@@ -136,18 +138,30 @@ export default function AnalyzePage() {
         </div>
 
         {result && (
-
           <div className="mt-12">
 
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <div className="grid md:grid-cols-4 gap-6 mb-8">
+
+              <div className="rounded-3xl bg-white border border-neutral-200 p-6">
+                <div className="w-28 h-28 mx-auto">
+                  <CircularProgressbar
+                    value={score}
+                    text={`${score}`}
+                  />
+                </div>
+
+                <div className="text-center mt-4 font-semibold">
+                  Wellness Score
+                </div>
+              </div>
 
               <div className="rounded-3xl bg-white border border-neutral-200 p-6">
                 <div className="text-sm text-neutral-500">
-                  Analysis Status
+                  Risk Level
                 </div>
 
-                <div className="mt-3 text-2xl font-bold">
-                  Completed
+                <div className="mt-3 text-3xl font-bold">
+                  Moderate
                 </div>
               </div>
 
@@ -156,17 +170,17 @@ export default function AnalyzePage() {
                   AI Engine
                 </div>
 
-                <div className="mt-3 text-2xl font-bold">
+                <div className="mt-3 text-3xl font-bold">
                   GPT-4o Vision
                 </div>
               </div>
 
               <div className="rounded-3xl bg-white border border-neutral-200 p-6">
                 <div className="text-sm text-neutral-500">
-                  Report Language
+                  Language
                 </div>
 
-                <div className="mt-3 text-2xl font-bold">
+                <div className="mt-3 text-3xl font-bold">
                   {language}
                 </div>
               </div>
@@ -175,9 +189,23 @@ export default function AnalyzePage() {
 
             <div className="rounded-[32px] bg-white border border-neutral-200 p-10">
 
-              <h2 className="text-4xl font-bold mb-8">
-                AI Analysis Report
-              </h2>
+              <div className="flex items-center justify-between mb-8">
+
+                <div>
+                  <h2 className="text-4xl font-bold">
+                    AI Analysis Report
+                  </h2>
+
+                  <p className="text-neutral-500 mt-2">
+                    Powered by GPT-4o Vision
+                  </p>
+                </div>
+
+                <button className="rounded-2xl border px-5 py-3">
+                  Download PDF
+                </button>
+
+              </div>
 
               <div className="whitespace-pre-wrap leading-8 text-neutral-800">
                 {result}
@@ -190,7 +218,7 @@ export default function AnalyzePage() {
               <a
                 href="https://www.zamavil.com"
                 target="_blank"
-                className="rounded-3xl bg-white border border-neutral-200 p-8"
+                className="rounded-3xl bg-white border border-neutral-200 p-8 hover:shadow-lg transition"
               >
                 <h3 className="text-2xl font-semibold">
                   Zamavil
@@ -204,7 +232,7 @@ export default function AnalyzePage() {
               <a
                 href="https://www.drbentonit.com"
                 target="_blank"
-                className="rounded-3xl bg-white border border-neutral-200 p-8"
+                className="rounded-3xl bg-white border border-neutral-200 p-8 hover:shadow-lg transition"
               >
                 <h3 className="text-2xl font-semibold">
                   Dr Bentonit
@@ -218,7 +246,7 @@ export default function AnalyzePage() {
               <a
                 href="https://www.peloidtherapy.com"
                 target="_blank"
-                className="rounded-3xl bg-white border border-neutral-200 p-8"
+                className="rounded-3xl bg-white border border-neutral-200 p-8 hover:shadow-lg transition"
               >
                 <h3 className="text-2xl font-semibold">
                   Peloid Therapy
@@ -232,11 +260,9 @@ export default function AnalyzePage() {
             </div>
 
           </div>
-
         )}
 
       </section>
-
     </main>
   )
 }
