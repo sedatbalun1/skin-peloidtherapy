@@ -6,11 +6,11 @@ import ReactMarkdown from 'react-markdown'
 export default function HomePage() {
   const [preview, setPreview] = useState<string | null>(null)
   const [language, setLanguage] = useState('Türkçe')
+  const [analysisMode, setAnalysisMode] = useState('Wellness Scan') // New Pro Feature
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState('')
   const [dragActive, setDragActive] = useState(false)
 
-  // Drag & Drop Handlers with strict types
   const handleDrag = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -61,6 +61,7 @@ export default function HomePage() {
         body: JSON.stringify({
           image: preview,
           language,
+          mode: analysisMode, // Passing the grey area configuration to the prompt backend
         }),
       })
 
@@ -72,7 +73,7 @@ export default function HomePage() {
       setResult(data.result || 'Analiz sonucu alınamadı.')
     } catch (error) {
       console.error(error)
-      setResult('**Analiz Hatası:** Görsel katmanları işlenirken bir sorun oluştu. Lütfen API bağlantınızı ve internetinizi kontrol edip tekrar deneyiniz.')
+      setResult('**Sistem Mesajı:** Görsel katmanları işlenirken bir sorun oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.')
     } finally {
       setLoading(false)
     }
@@ -86,14 +87,12 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#FAFAFA] text-neutral-800 antialiased font-sans selection:bg-neutral-200/60">
       
-      {/* Top Loading Indicator */}
       {loading && (
         <div className="fixed top-0 left-0 right-0 h-[2px] bg-neutral-100 z-[60] overflow-hidden">
           <div className="h-full bg-[#35261F] animate-pulse w-full origin-left scale-x-[0.4]" />
         </div>
       )}
 
-      {/* Navigation Header */}
       <header className="sticky top-0 z-50 border-b border-neutral-200/50 bg-white/75 backdrop-blur-md">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           
@@ -126,17 +125,15 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Main Container */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8 md:py-10">
         
-        {/* Workspace Title Area */}
         <div className="border-b border-neutral-200/50 pb-5 mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
             <h2 className="text-2xl sm:text-3xl tracking-tight font-semibold text-neutral-900">
               AI Wellness Workspace
             </h2>
             <p className="mt-1 text-xs sm:text-sm text-neutral-500 max-w-2xl leading-relaxed">
-              Anatolia mineral bilim temelli telemetri ve bilgisayarlı görü arayüzü. Analiz verilerini doğrudan ve pürüzsüzce üretin.
+              Anadolu mineral ekosistemi ve bütünsel wellness modellemesi tabanlı bilgisayarlı görü arayüzü. Teşhis amacı taşımayan destekleyici veri paneli.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs text-neutral-400 font-medium">
@@ -145,14 +142,43 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Workspace Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[0.35fr_0.65fr] gap-6 items-start">
           
-          {/* Left Panel - Control & Inputs */}
           <div className="space-y-4">
             <div className="rounded-2xl border border-neutral-200/90 bg-white p-5 shadow-sm">
               
-              {/* Language Selection */}
+              {/* ANALYSIS DEPTH MODE SELECT (NEW GREY-AREA PRO FEATURE) */}
+              <div className="mb-4">
+                <label className="block text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-1.5">
+                  Analysis Framework Mode
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAnalysisMode('Wellness Scan')}
+                    className={`h-8 rounded-lg text-xs font-semibold transition border ${
+                      analysisMode === 'Wellness Scan'
+                        ? 'border-[#35261F] bg-[#35261F]/5 text-[#35261F]'
+                        : 'border-neutral-200 bg-neutral-50 text-neutral-600 hover:bg-neutral-100'
+                    }`}
+                  >
+                    Bütünsel Tarama
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAnalysisMode('Mineral Telemetry')}
+                    className={`h-8 rounded-lg text-xs font-semibold transition border ${
+                      analysisMode === 'Mineral Telemetry'
+                        ? 'border-[#35261F] bg-[#35261F]/5 text-[#35261F]'
+                        : 'border-neutral-200 bg-neutral-50 text-neutral-600 hover:bg-neutral-100'
+                    }`}
+                  >
+                    Peloid Telemetri
+                  </button>
+                </div>
+              </div>
+
+              {/* LANGUAGE SELECTION */}
               <div className="mb-4">
                 <label className="block text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-1.5">
                   Target Diagnostics Language
@@ -177,7 +203,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Payload Zone */}
+              {/* PAYLOAD ZONE */}
               <div>
                 <label className="block text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-1.5">
                   Inspection Payload
@@ -189,7 +215,7 @@ export default function HomePage() {
                     onDragOver={handleDrag}
                     onDragLeave={handleDrag}
                     onDrop={handleDrop}
-                    className={`flex flex-col items-center justify-center rounded-xl border border-dashed h-[280px] cursor-pointer transition-all p-4 text-center group relative ${
+                    className={`flex flex-col items-center justify-center rounded-xl border border-dashed h-[240px] cursor-pointer transition-all p-4 text-center group relative ${
                       dragActive 
                         ? "border-[#35261F] bg-neutral-50" 
                         : "border-neutral-200 bg-neutral-50/40 hover:bg-neutral-50 hover:border-neutral-300"
@@ -206,12 +232,12 @@ export default function HomePage() {
                     </div>
                     <span className="mt-3 text-xs font-semibold text-neutral-700">Görsel Seçin veya Sürükleyin</span>
                     <span className="mt-1 text-[11px] text-neutral-400 max-w-[200px] leading-normal font-normal">
-                      Dermatolojik doku, tırnak, saç derisi anomalisi fotoğrafı.
+                      Doku bütünlüğü dengesi incelemesi için fotoğraf.
                     </span>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <div className="overflow-hidden rounded-xl border border-neutral-200 bg-neutral-950 h-[280px] flex items-center justify-center p-2 relative">
+                    <div className="overflow-hidden rounded-xl border border-neutral-200 bg-neutral-950 h-[240px] flex items-center justify-center p-2 relative">
                       <img
                         src={preview}
                         alt="Workspace Preview Pipeline"
@@ -233,7 +259,7 @@ export default function HomePage() {
                         disabled={loading}
                         className="col-span-2 h-9 rounded-lg bg-[#35261F] text-white text-xs font-semibold shadow-sm hover:opacity-95 transition disabled:opacity-40 flex items-center justify-center gap-1.5"
                       >
-                        {loading ? 'İşleniyor...' : 'Analizi Başlat'}
+                        {loading ? 'Sentezleniyor...' : 'Analizi Başlat'}
                       </button>
                     </div>
                   </div>
@@ -243,55 +269,54 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Panel - Diagnostics & Live Telemetry */}
           <div className="space-y-4">
             
-            {/* Meta Widgets bar */}
+            {/* META WIDGETS BAR */}
             <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3 shadow-sm">
               <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-between gap-3 text-xs">
                 
                 <div className="flex items-center gap-2">
-                  <span className="text-neutral-400 font-medium">Wellness Score:</span>
+                  <span className="text-neutral-400 font-medium">Wellness Index:</span>
                   <span className="font-semibold text-neutral-900 bg-neutral-100 px-1.5 py-0.5 rounded text-[11px] font-mono">
                     {result ? '78' : '--'} <span className="text-neutral-400 font-normal">/100</span>
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2 border-none sm:border-l sm:border-neutral-200 sm:pl-4">
-                  <span className="text-neutral-400 font-medium">Risk Matrix:</span>
+                  <span className="text-neutral-400 font-medium">Bariyer Hassasiyeti:</span>
                   {result ? (
                     <span className="font-semibold text-amber-800 bg-amber-50 border border-amber-200/50 px-1.5 py-0.5 rounded text-[11px]">
-                      Moderate
+                      Orta Seviye
                     </span>
                   ) : (
-                    <span className="font-medium text-neutral-400">Awaiting...</span>
+                    <span className="font-medium text-neutral-400">Ölçülüyor...</span>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2 border-none sm:border-l sm:border-neutral-200 sm:pl-4">
-                  <span className="text-neutral-400 font-medium">Core Model:</span>
-                  <span className="font-medium text-neutral-700 font-mono">GPT-4o</span>
+                  <span className="text-neutral-400 font-medium">Framework:</span>
+                  <span className="font-medium text-neutral-700 font-mono">Peloid v4</span>
                 </div>
 
                 <div className="flex items-center gap-2 border-none sm:border-l sm:border-neutral-200 sm:pl-4">
-                  <span className="text-neutral-400 font-medium">Output:</span>
-                  <span className="font-semibold text-neutral-700">{language}</span>
+                  <span className="text-neutral-400 font-medium">Mod:</span>
+                  <span className="font-semibold text-neutral-700">{analysisMode}</span>
                 </div>
 
               </div>
             </div>
 
-            {/* Structured Markdown Output Container */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm min-h-[460px] flex flex-col justify-between">
+            {/* DIAGNOSTICS CONTAINER */}
+            <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm min-h-[460px] flex flex-col justify-between gap-6">
               
               <div className="w-full">
                 <div className="flex items-center justify-between border-b border-neutral-100 pb-4 mb-6">
                   <div>
                     <h3 className="text-sm sm:text-base font-semibold text-neutral-900 tracking-tight">
-                      AI Analysis Diagnostics
+                      Bütünsel Wellness Değerlendirmesi
                     </h3>
                     <p className="text-[11px] text-neutral-400 mt-0.5 font-normal">
-                      Sentezlenmiş tıbbi ve yapılandırılmış klinik raporlama alanı
+                      Mineral dengesi ve doku bütünlüğü veri dökümü
                     </p>
                   </div>
                   
@@ -300,7 +325,7 @@ export default function HomePage() {
                       onClick={() => window.print()}
                       className="h-7 rounded-md border border-neutral-200 bg-white px-3 text-[11px] font-semibold text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 transition shadow-sm"
                     >
-                      Export PDF
+                      Döküm Al (PDF)
                     </button>
                   )}
                 </div>
@@ -312,13 +337,18 @@ export default function HomePage() {
                 ) : (
                   <div className="h-80 flex flex-col items-center justify-center text-center p-4 border border-dashed border-neutral-200/70 rounded-xl bg-neutral-50/20">
                     <span className="text-neutral-400 text-xs sm:text-sm font-semibold">
-                      {loading ? 'Klinik veriler ve telemetri logları işleniyor...' : 'Tanısal İşlem Tetiklenmeyi Bekliyor'}
+                      {loading ? 'Doku spektrumu ve peloid matrisi analiz ediliyor...' : 'Yapay Zekâ Analizi Hazır'}
                     </span>
                     <p className="text-[11px] text-neutral-400 max-w-xs mt-1 leading-normal font-normal">
-                      {loading ? 'Yapay zekâ görsel katmanları analiz ediyor, lütfen arayüzü yenilemeyiniz.' : 'Sol kontrol paneli üzerinden geçerli bir anomali görseli yükleyip motoru çalıştırarak raporlamayı başlatın.'}
+                      {loading ? 'Veriler işleniyor, lütfen bekleyiniz.' : 'Görsel yükleyip "Analizi Başlat" butonuna basarak bütünsel tarama raporunu tetikleyin.'}
                     </p>
                   </div>
                 )}
+              </div>
+
+              {/* STRICT GREY-AREA DISCLAIMER (LEGAL & COMPLIANCE) */}
+              <div className="border-t border-neutral-100 pt-4 text-[11px] text-neutral-400 leading-relaxed font-normal">
+                <strong className="text-neutral-500 font-medium">Bütünsel Wellness Bildirimi:</strong> Bu panelde sunulan veriler ve yapay zekâ değerlendirmeleri tıbbi teşhis, tedavi veya klinik bir tanı amacı taşımamaktadır. Sistem, mineral dengesi ve bütünsel cilt wellness takibi için tasarlanmıştır. Kalıcı veya ilerleyen durumlarda lütfen tıp uzmanlarına danışınız.
               </div>
               
             </div>
@@ -327,7 +357,6 @@ export default function HomePage() {
 
         </div>
 
-        {/* Institutional Links & Resources */}
         <div className="mt-12 border-t border-neutral-200/60 pt-6">
           <h4 className="text-[10px] uppercase tracking-wider text-neutral-400 font-bold mb-3.5 tracking-widest">
             Önerilen Mineral Terapi Protokolleri & Kaynaklar
